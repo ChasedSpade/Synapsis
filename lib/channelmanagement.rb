@@ -1,8 +1,8 @@
 class ChannelManagement
     include Cinch::Plugin
     match /topic (.+)/, method: :topic
-    match /kick (.+) (.+)/, method: :kick
-    match /kickban (.+) (.+)/, method: :kickban
+    match /kick (\S+) (.+)$/, method: :kick
+    match /kickban (\S+) (.+)$/, method: :kickban
     match /ban (.+)/, method: :ban
     match /unban (.+)/, method: :unban
     match /voice (.+)/, method: :voice
