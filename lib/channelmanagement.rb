@@ -9,13 +9,18 @@ class ChannelManagement
     match /devoice (.+)/, method: :devoice
 
     def topic(m, topic)
+      if permissions(m) == false
+        return false
+      end
         if permissions(m)
           Channel(m.channel).topic = topic
         end
       end
 
     def kick(m, target, reason)
-      permissions(m)
+      if permissions(m) == false
+        return false
+      end
       if Channel(m.channel).has_user?(target) == false
         Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
         return false
@@ -25,7 +30,9 @@ class ChannelManagement
     end
 
     def kickban(m, target, reason)
-      permissions(m)
+      if permissions(m) == false
+        return false
+      end
       if Channel(m.channel).has_user?(target) == false
         Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
         return false
@@ -43,7 +50,9 @@ class ChannelManagement
     end
 
     def ban(m, target)
-      permissions(m)
+      if permissions(m) == false
+        return false
+      end
       if Channel(m.channel).has_user?(target) == false
         Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
         return false
@@ -63,7 +72,9 @@ class ChannelManagement
     end
 
     def unban(m, target)
-      permissions(m)
+      if permissions(m) == false
+        return false
+      end
       if Channel(m.channel).has_user?(target) == false
         if User(target).unknown?
           Target(m.user).notice "There is no user #{Format(:bold, target)}."
@@ -88,7 +99,9 @@ class ChannelManagement
     end
 
     def voice(m, target)
-        permissions(m)
+      if permissions(m) == false
+        return false
+      end
         if Channel(m.channel).has_user?(target) == false
           Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
           return false
@@ -102,7 +115,9 @@ class ChannelManagement
       end
 
     def devoice(m, target)
-      permissions(m)
+      if permissions(m) == false
+        return false
+      end
       if Channel(m.channel).has_user?(target) == false
         Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
         return false
@@ -119,11 +134,7 @@ class ChannelManagement
 
     def permissions(m)
       if Channel(m.channel).opped?(m.user)
-        if Channel(m.channel).opped?(bot.nick) or Channel(m.channel).half_opped?(bot.nick)
-          return true
-        else
-          return false
-        end
+        return true
       else
         return false
       end
