@@ -57,8 +57,8 @@ $config["zncs"].each do |name, server|
 		configure do |c|
 			c.nick = $config["bot"]["nick"]
 			c.server = server["server"]
-			c.port = $config["bot"]["zncport"]
-			c.password = "Synapsis/Monitor:#{$config["bot"]["zncpass"]}"
+			c.port = server["port"]
+			c.password = "Synapsis/Monitor:#{server["password"]}"
 			c.ssl.use = true
 			c.plugins.plugins = [ZNCCommands, ZNCEvents]
 			c.plugins.prefix = /^%/
