@@ -31,7 +31,7 @@ class Administration
       $bots.each do |key, bot|
         puts "Terminating IRC connection for #{key}..."
         adminchan(m, "#{Format(:red, "SHUTDOWN:")} #{Format(:orange, bot.irc.network.name.to_s)}")
-        bot.quit
+        bot.quit "Shutdown requested."
       end
 
       $zncs.each do |key, bot|
