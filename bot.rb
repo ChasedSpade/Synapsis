@@ -21,6 +21,7 @@ $:.unshift File.dirname(__FILE__)
 require 'cinch'
 require 'rubygems'
 require 'lib/channelmanagement'
+require 'lib/administration'
 
 $config = YAML.load_file("config/config.yaml")
 $bots = Hash.new
@@ -38,7 +39,7 @@ $config["servers"].each do |name, server|
 			c.sasl.username = $config["bot"]["nick"]
 			c.sasl.password = $config["bot"]["nickserv"]
 			c.channels = $config["bot"]["channels"]+server["channels"]
-			c.plugins.plugins = [ChannelManagement, Cinch::Plugins::Identify]
+			c.plugins.plugins = [ChannelManagement, Administration, SongOfTheMonth, Cinch::Plugins::Identify]
 			c.plugins.prefix = /^~/
 			c.plugins.options[Cinch::Plugins::Identify] = {
 				:password => "#{$config["bot"]["nickserv"]}",
