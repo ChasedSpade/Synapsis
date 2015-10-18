@@ -23,6 +23,7 @@ require 'rubygems'
 require 'lib/channelmanagement'
 require 'lib/administration'
 require 'lib/minecraft'
+require 'lib/events'
 
 $config = YAML.load_file("config/config.yaml")
 $bots = Hash.new
@@ -40,7 +41,7 @@ $config["servers"].each do |name, server|
 			c.sasl.username = $config["bot"]["nick"]
 			c.sasl.password = $config["bot"]["nickserv"]
 			c.channels = $config["bot"]["channels"]+server["channels"]
-			c.plugins.plugins = [Minecraft, ChannelManagement, Administration, SongOfTheMonth, Cinch::Plugins::Identify]
+			c.plugins.plugins = [Events, Minecraft, ChannelManagement, Administration, SongOfTheMonth, Cinch::Plugins::Identify]
 			c.plugins.prefix = /^~/
 			c.plugins.options[Cinch::Plugins::Identify] = {
 				:password => "#{$config["bot"]["nickserv"]}",
