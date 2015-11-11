@@ -23,8 +23,10 @@ class Nicktimer
   def on_connect
     Timer(90) {
       if @bot.nick != $config["bot"]["nick"]
-        Target('NickServ').send "GHOST #{$config["bot"]["nick"]} #{$config["bot"]["nickserv"]}"
-        sleep 3
+        if User($config["bot"]["nick"]).unknown? == false
+          Target('NickServ').send "GHOST #{$config["bot"]["nick"]} #{$config["bot"]["nickserv"]}"
+          sleep 3
+        end
         @bot.nick = $config["bot"]["nick"]
       end
     }

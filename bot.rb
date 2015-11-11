@@ -27,7 +27,7 @@ require 'lib/administration'
 require 'lib/minecraft'
 require 'lib/events'
 require 'lib/songofthemonth'
-require 'lib/bot/nicktimer.rb'
+require 'lib/bot/nicktimer'
 
 $config = YAML.load_file("config/config.yaml")
 $bots = Hash.new
