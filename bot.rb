@@ -27,10 +27,10 @@ require 'lib/administration'
 require 'lib/minecraft'
 require 'lib/events'
 require 'lib/songofthemonth'
+require 'lib/bot/nicktimer.rb'
 
 $config = YAML.load_file("config/config.yaml")
 $bots = Hash.new
-$zncs = Hash.new
 $threads = Array.new
 
 $config["servers"].each do |name, server|
@@ -45,7 +45,7 @@ $config["servers"].each do |name, server|
 			c.sasl.username = $config["bot"]["nick"]
 			c.sasl.password = $config["bot"]["nickserv"]
 			c.channels = $config["bot"]["channels"]+server["channels"]
-			c.plugins.plugins = [Events, Minecraft, ChannelManagement, Administration, SongOfTheMonth, Cinch::Plugins::Identify]
+			c.plugins.plugins = [Nicktimer, Events, Minecraft, ChannelManagement, Administration, SongOfTheMonth, Cinch::Plugins::Identify]
 			c.plugins.prefix = /^~/
 			c.plugins.options[Cinch::Plugins::Identify] = {
 				:password => "#{$config["bot"]["nickserv"]}",
@@ -59,29 +59,8 @@ $config["servers"].each do |name, server|
 	$bots[name] = bot
 end
 
-$config["zncs"].each do |name, server|
-	bot = Cinch::Bot.new do
-		configure do |c|
-			c.nick = $config["bot"]["nick"]
-			c.server = server["server"]
-			c.port = server["port"]
-			c.password = "Synapsis/Monitor:#{server["password"]}"
-			c.ssl.use = true
-			c.plugins.plugins = [ZNCCommands, ZNCEvents]
-			c.plugins.prefix = /^%/
-		end
-	end
-	$zncs[name] = bot
-end
-
-
 $bots.each do |key, bot|
 	puts "Starting IRC connection for #{key}..."
-	$threads << Thread.new { bot.start }
-end
-
-$zncs.each do |key, bot|
-	puts "Starting ZNC connection for #{key}..."
 	$threads << Thread.new { bot.start }
 end
 
