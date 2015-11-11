@@ -19,11 +19,14 @@
 $:.unshift File.dirname(__FILE__)
 
 require 'cinch'
+require "cinch/plugins/identify"
+require 'yaml'
 require 'rubygems'
 require 'lib/channelmanagement'
 require 'lib/administration'
 require 'lib/minecraft'
 require 'lib/events'
+require 'lib/songofthemonth'
 
 $config = YAML.load_file("config/config.yaml")
 $bots = Hash.new
@@ -37,6 +40,7 @@ $config["servers"].each do |name, server|
 			c.server = server["server"]
 			c.port = server["port"]
 			c.user = $config["bot"]["user"]
+			c.realname = $config["bot"]["real"]
 			c.ssl.use = true
 			c.sasl.username = $config["bot"]["nick"]
 			c.sasl.password = $config["bot"]["nickserv"]
