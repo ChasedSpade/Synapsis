@@ -65,7 +65,7 @@ class SongOfTheMonth
       $bots.each do |key, bott|
         bott.channels.each do |channel, blah|
           if channel == $config["mainchannel"]
-            Channel(channel).topic = "Welcome to #{Format(:blue, "#{$config["mainchannel"]}")}. | #{Format(:blue, "#{$config["channelurl"]}")} | #{Format(:orange, "SOTM:")} #{Format(:orange, File.read("#{File.dirname(__FILE__)}/sotm/song"))} by #{Format(:orange, File.read("#{File.dirname(__FILE__)}/sotm/artist"))} (#{Format(:orange, File.read("#{File.dirname(__FILE__)}/sotm/link"))}) | #{Format(:red, "Development: #ChasedSpade")} on #{Format(:red, "FususIRC")}"
+            Channel(channel).topic = "Welcome to #{Format(:blue, "#{$config["mainchannel"]}")}. | #{Format(:blue, "#{$config["channelurl"]}")} | #{Format(:orange, "SOTM:")} #{Format(:orange, File.read("#{File.dirname(__FILE__)}/sotm/song"))} by #{Format(:orange, File.read("#{File.dirname(__FILE__)}/sotm/artist"))} (#{Format(:orange, File.read("#{File.dirname(__FILE__)}/sotm/link"))})"
           end
         end
       end
