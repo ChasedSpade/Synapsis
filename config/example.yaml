@@ -17,6 +17,7 @@
 adminnet: FususIRC
 ownernickserv: ChasedSpade
 adminchannel: "##AdminChannel"
+channelurl: https://www.christyrrel.me/
 
 bot:
   nickserv: UnPasswordO
