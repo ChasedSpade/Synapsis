@@ -44,13 +44,3 @@ servers:
     port: 6697
     channels:
       - "#OtherImportantchannel"
-
-zncs:
-  Parene:
-    server: bncserver1.christyrrel.me
-    port: 1339
-    password: hiimafancypassword
-  Dainra:
-    server: bncserver2.christyrrel.me
-    port: 1339
-    password: hiimafancypassword
