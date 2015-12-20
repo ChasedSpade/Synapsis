@@ -35,7 +35,7 @@ class ChannelManagement
   end
 
   def kick(m, target, reason)
-    if Channel(m.channel).opped?(m.user)
+    if Channel(m.channel).opped?(m.user) && Channel(m.channel).opped?(@bot.nick)
         if Channel(m.channel).has_user?(target)
             Channel(m.channel).kick(target, reason)
         else
@@ -47,7 +47,7 @@ class ChannelManagement
   end
 
   def kickban(m, target, reason)
-    if Channel(m.channel).opped?(m.user)
+    if Channel(m.channel).opped?(m.user) && Channel(m.channel).opped?(@bot.nick)
         if Channel(m.channel).has_user?(target)
             Channel(m.channel).ban(target)
             Channel(m.channel).kick(target, reason)
@@ -60,7 +60,7 @@ class ChannelManagement
   end
 
   def ban(m, target)
-    if Channel(m.channel).opped?(m.user)
+    if Channel(m.channel).opped?(m.user) && Channel(m.channel).opped?(@bot.nick)
         Channel(m.channel).ban(target)
     else
         m.reply "You do not have permission to run this command."
