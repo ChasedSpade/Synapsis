@@ -26,76 +26,45 @@ class ChannelManagement
   match /voice (.+)/, method: :voice
   match /devoice (.+)/, method: :devoice
 
-  def topic(m, topic)
-    if permissions(m) == false
-      return false
-    end
-    if permissions(m)
-      Channel(m.channel).topic = topic
+  def topic(m, sTopic)
+    if Channel(m.channel).opped?(m.user)
+        Channel(m.channel).topic = sTopic
+    else
+        m.reply "You do not have permission to run this command."
     end
   end
 
   def kick(m, target, reason)
-    if permissions(m) == false
-      return false
+    if Channel(m.channel).opped?(m.user)
+        if Channel(m.channel).has_user?(target)
+            Channel(m.channel).kick(target, reason)
+        else
+            Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
+        end
+    else
+        m.reply "You do not have permission to run this command."
     end
-
-    if Channel(m.channel).has_user?(target) == false
-      Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
-      return false
-    end
-
-    Channel(m.channel).kick(target, reason + " (#{m.user.nick})")
-    Target(m.user).notice "Kicked #{Format(:bold, "#{target}")} from #{Format(:bold, "#{m.channel}")}."
   end
 
   def kickban(m, target, reason)
-    if permissions(m) == false
-      return false
+    if Channel(m.channel).opped?(m.user)
+        if Channel(m.channel).has_user?(target)
+            Channel(m.channel).ban(target)
+            Channel(m.channel).kick(target, reason)
+        else
+            Target(m.user).notice("There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}")
+        end
+    else
+        m.reply "You do not have permission to run this command."
     end
-
-    if Channel(m.channel).has_user?(target) == false
-      Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
-      return false
-    end
-
-    Channel(m.channel).bans.each do |banmask, blah|
-      if User(target).match(banmask)
-        Channel(m.channel).kick(target, reason + " (#{m.user.nick})")
-        Target(m.user).notice "Kicked #{Format(:bold, "#{target}")} from #{Format(:bold, "#{m.channel}")}."
-      end
-      return false
-    end
-
-    Channel(m.channel).ban("*!*@"+User(target).host)
-    Channel(m.channel).kick(target, reason + " (#{m.user.nick})")
-    Target(m.user).notice "Kickbanned #{Format(:bold, "#{target}")} from #{Format(:bold, "#{m.channel}")}."
   end
 
   def ban(m, target)
-    if permissions(m) == false
-      return false
+    if Channel(m.channel).opped?(m.user)
+        Channel(m.channel).ban(target)
+    else
+        m.reply "You do not have permission to run this command."
     end
-
-    if Channel(m.channel).has_user?(target) == false
-      Target(m.user).notice "There is no user #{Format(:bold, target)} on #{Format(:bold, m.channel.name)}."
-      return false
-    end
-
-    bancount = 0
-    Channel(m.channel).bans.each do |banmask, blah|
-      if User(target).match(banmask)
-        bancount = bancount + 1
-      end
-    end
-
-    if bancount != 0
-      Target(m.user).notice "#{Format(:bold, "#{bancount}")} bans matching #{Format(:bold, "#{target}")} found on #{Format(:bold, "#{m.channel}")}."
-      return false
-    end
-
-    Channel(m.channel).ban("*!*@"+User(target).host)
-    Target(m.user).notice "Banned #{Format(:bold, "#{target}")} on #{Format(:bold, "#{m.channel}")}."
   end
 
   def unban(m, target)
